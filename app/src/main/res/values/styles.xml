@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="LabelTextStyle">
+        <item name="android:textColor">@color/blueDark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
