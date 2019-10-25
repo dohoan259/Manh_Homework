@@ -4,16 +4,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-import itto.pl.homework.data.DataManager;
-import itto.pl.homework.data.device.DeviceManager;
+import itto.pl.homework.data.repository.DataRepository;
+import itto.pl.homework.data.model.BatteryEntity;
+import itto.pl.homework.data.repository.DeviceManager;
 
-public class LoadBatteryUseCase {
+public class UpdateBatteryUseCase {
 
-    private DataManager mDataManager;
+    private DataRepository mDataRepository;
     private DeviceManager mDeviceManager;
 
     /**
-     * Battery
+     * BatteryEntity
      */
     /* To easy to check, using 9s instead of 9 minutes */
     private static final int BATTERY_INTERVAL = 9000;
@@ -21,17 +22,17 @@ public class LoadBatteryUseCase {
     private TimerTask mBatteryTimerTask = new TimerTask() {
         @Override
         public void run() {
-            mDataManager.addBatteryInfo(mDeviceManager.getBatteryLevel());
+            mDataRepository.addBatteryInfo(new BatteryEntity(mDeviceManager.getBatteryLevel()));
         }
     };
 
-    public LoadBatteryUseCase(DataManager dataManager, DeviceManager deviceManager) {
-        mDataManager = dataManager;
+    public UpdateBatteryUseCase(DataRepository dataRepository, DeviceManager deviceManager) {
+        mDataRepository = dataRepository;
         mDeviceManager = deviceManager;
     }
 
     public void start() {
-        // Load Battery
+        // Load BatteryEntity
         if (mBatteryTimer != null) {
             mBatteryTimer.cancel();
             mBatteryTimer = null;
@@ -41,7 +42,7 @@ public class LoadBatteryUseCase {
     }
 
     public void stop() {
-        // Load Battery
+        // Load BatteryEntity
         if (mBatteryTimer != null) {
             mBatteryTimer.cancel();
             mBatteryTimer = null;

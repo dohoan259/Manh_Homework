@@ -7,18 +7,18 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import itto.pl.homework.data.DataManager;
-import itto.pl.homework.data.device.DeviceManager;
-import itto.pl.homework.usecase.LoadBatteryUseCase;
-import itto.pl.homework.usecase.LoadLocationUseCase;
+import itto.pl.homework.data.repository.DataRepository;
+import itto.pl.homework.data.repository.DeviceManager;
+import itto.pl.homework.usecase.UpdateBatteryUseCase;
+import itto.pl.homework.usecase.UpdateLocationUseCase;
 import itto.pl.homework.usecase.SendDataUseCase;
 
 /**
  * Created by PL_itto-PC on 10/24/2019
  **/
 public class MainViewModel extends AndroidViewModel {
-    private LoadLocationUseCase mLoadLocationUseCase;
-    private LoadBatteryUseCase mLoadBatteryUseCase;
+    private UpdateLocationUseCase mUpdateLocationUseCase;
+    private UpdateBatteryUseCase mUpdateBatteryUseCase;
     private SendDataUseCase mSendDataUseCase;
 
     /**
@@ -51,9 +51,9 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(@NonNull Application application) {
         super(application);
 
-        mLoadLocationUseCase = new LoadLocationUseCase(DataManager.getInstance(application), DeviceManager.getInstance(application));
-        mLoadBatteryUseCase = new LoadBatteryUseCase(DataManager.getInstance(application), new DeviceManager(application));
-        mSendDataUseCase = new SendDataUseCase(DataManager.getInstance(application));
+        mUpdateLocationUseCase = new UpdateLocationUseCase(DataRepository.getInstance(), DeviceManager.getInstance(application));
+        mUpdateBatteryUseCase = new UpdateBatteryUseCase(DataRepository.getInstance(), new DeviceManager(application));
+        mSendDataUseCase = new SendDataUseCase(DataRepository.getInstance());
 
         mIsLoading.postValue(false);
     }
@@ -63,8 +63,8 @@ public class MainViewModel extends AndroidViewModel {
      */
     public void startLoading() {
         mIsLoading.setValue(true);
-        mLoadLocationUseCase.start();
-        mLoadBatteryUseCase.start();
+        mUpdateLocationUseCase.start();
+        mUpdateBatteryUseCase.start();
         mSendDataUseCase.start();
     }
 
@@ -73,8 +73,8 @@ public class MainViewModel extends AndroidViewModel {
      */
     public void stopLoading() {
         mIsLoading.setValue(false);
-        mLoadLocationUseCase.stop();
-        mLoadBatteryUseCase.stop();
+        mUpdateLocationUseCase.stop();
+        mUpdateBatteryUseCase.stop();
         mSendDataUseCase.stop();
     }
 }

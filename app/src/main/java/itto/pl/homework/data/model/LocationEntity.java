@@ -5,9 +5,14 @@ import androidx.annotation.NonNull;
 /**
  * Created by PL_itto-PC on 10/25/2019
  **/
-public class LocationItem {
+public class LocationEntity {
     private Double mLatitude = 0.0;
     private Double mLongitude = 0.0;
+
+    public LocationEntity(Double mLatitude, Double mLongitude) {
+        this.mLatitude = mLatitude;
+        this.mLongitude = mLongitude;
+    }
 
     public Double getLatitude() {
         return mLatitude;

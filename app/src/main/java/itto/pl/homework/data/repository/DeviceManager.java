@@ -1,19 +1,14 @@
-package itto.pl.homework.data.device;
+package itto.pl.homework.data.repository;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.BatteryManager;
-import android.util.Log;
 
-import itto.pl.homework.data.model.LocationItem;
+import itto.pl.homework.ui.viewmodel.LocationItem;
 
 import static android.content.Context.BATTERY_SERVICE;
-
-/**
- * Created by PL_itto-PC on 10/24/2019
- **/
 
 /**
  * Responsibility for get device battery/ sensor information
@@ -45,14 +40,12 @@ public class DeviceManager {
     }
 
     /**
-     * get current battery level of this device
+     * get current battery of this devices
      *
      * @return
      */
     public int getBatteryLevel() {
-        int batLevel = mBatteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-        Log.d(TAG, "getBatteryLevel: " + batLevel);
-        return batLevel;
+        return mBatteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
     }
 
     /**
@@ -62,22 +55,6 @@ public class DeviceManager {
         @SuppressLint("MissingPermission") Location locationGPS = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         @SuppressLint("MissingPermission") Location locationNet = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-//        long GPSLocationTime = 0;
-//        if (null != locationGPS) {
-//            GPSLocationTime = locationGPS.getTime();
-//        }
-//
-//        long NetLocationTime = 0;
-//
-//        if (null != locationNet) {
-//            NetLocationTime = locationNet.getTime();
-//        }
-//
-//        if (0 < GPSLocationTime - NetLocationTime) {
-//            return locationGPS;
-//        } else {
-//            return locationNet;
-//        }
         LocationItem location = new LocationItem();
 
         if (locationGPS != null) {

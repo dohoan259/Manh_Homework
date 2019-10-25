@@ -3,16 +3,17 @@ package itto.pl.homework.usecase;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import itto.pl.homework.data.DataManager;
-import itto.pl.homework.data.device.DeviceManager;
-import itto.pl.homework.data.model.LocationItem;
+import itto.pl.homework.data.repository.DataRepository;
+import itto.pl.homework.data.model.LocationEntity;
+import itto.pl.homework.data.repository.DeviceManager;
+import itto.pl.homework.ui.viewmodel.LocationItem;
 
-public class LoadLocationUseCase {
-    private DataManager mDataManager;
+public class UpdateLocationUseCase {
+    private DataRepository mDataRepository;
     private DeviceManager mDeviceManager;
 
-    public LoadLocationUseCase(DataManager dataManager, DeviceManager deviceManager) {
-        mDataManager = dataManager;
+    public UpdateLocationUseCase(DataRepository dataRepository, DeviceManager deviceManager) {
+        mDataRepository = dataRepository;
         mDeviceManager = deviceManager;
     }
 
@@ -26,7 +27,7 @@ public class LoadLocationUseCase {
         @Override
         public void run() {
             LocationItem item = mDeviceManager.getLastBestLocation();
-            mDataManager.addLocation(item);
+            mDataRepository.addLocation(new LocationEntity(item.getLatitude(), item.getLongitude()));
         }
     };
 

@@ -3,12 +3,11 @@ package itto.pl.homework.usecase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import itto.pl.homework.data.DataManager;
+import itto.pl.homework.data.repository.DataRepository;
 import itto.pl.homework.data.network.RetrofitHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,12 +18,12 @@ import static itto.pl.homework.base.AppConstants.DATA_MAX_SIZE;
 public class SendDataUseCase {
 
     private ExecutorService executorService;
-    private DataManager mDataManager;
+    private DataRepository mDataRepository;
     private RetrofitHelper mRetrofitHelper;
     private Future future;
 
-    public SendDataUseCase(DataManager dataManager) {
-        mDataManager = dataManager;
+    public SendDataUseCase(DataRepository dataRepository) {
+        mDataRepository = dataRepository;
         mRetrofitHelper = RetrofitHelper.getInstance();
 
         executorService = Executors.newSingleThreadExecutor();
@@ -38,14 +37,14 @@ public class SendDataUseCase {
     }
 
     private void checkForPostData() {
-        mDataManager.getDataList().observeForever(dataList -> {
+        mDataRepository.getDataList().observeForever(dataList -> {
             if (dataList.size() == DATA_MAX_SIZE) {
-                // lock DataManager
-                synchronized (DataManager.class) {
+                // lock DataRepository
+                synchronized (DataRepository.class) {
                     sendData(dataList);
-                    mDataManager.clearDataList();
+                    mDataRepository.clearDataList();
                 }
-                // unlock DataManager
+                // unlock DataRepository
             }
         });
     }
