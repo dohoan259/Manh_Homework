@@ -20,23 +20,26 @@ import static android.content.Context.BATTERY_SERVICE;
  */
 public class DeviceManager {
     private static final String TAG = "DeviceManager";
-    private static DeviceManager sInstance;
+    private volatile static DeviceManager sInstance;
+    private static final Object sLock = new Object();
 
 
-    private Context mContext;
     private BatteryManager mBatteryManager;
     private LocationManager mLocationManager;
 
     public DeviceManager(Context context) {
-        mContext = context;
-        mBatteryManager = (BatteryManager) mContext.getSystemService(BATTERY_SERVICE);
+        mBatteryManager = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
         mLocationManager = (LocationManager)
                 context.getSystemService(Context.LOCATION_SERVICE);
     }
 
     public static DeviceManager getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new DeviceManager(context);
+            synchronized (sLock) {
+                if (sInstance == null) {
+                    sInstance = new DeviceManager(context);
+                }
+            }
         }
         return sInstance;
     }

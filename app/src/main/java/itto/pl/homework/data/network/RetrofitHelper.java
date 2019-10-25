@@ -16,14 +16,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
  **/
 public class RetrofitHelper {
     private static final String TAG = "RetrofitHelper";
+    private volatile static RetrofitHelper sInstance;
+    private static final Object sLock = new Object();
+
     private Retrofit mRetrofit;
     private static IServerAPI mServerAPI;
     private static final String BASE_URL = "http://sigma-solutions.eu";
-    private static RetrofitHelper sInstance;
+
 
     public static RetrofitHelper getInstance() {
         if (sInstance == null) {
-            sInstance = new RetrofitHelper();
+            synchronized (sLock) {
+                if (sInstance == null) {
+                    sInstance = new RetrofitHelper();
+                }
+            }
         }
         return sInstance;
     }

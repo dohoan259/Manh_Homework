@@ -28,13 +28,16 @@ import static itto.pl.homework.base.AppConstants.DATA_MAX_SIZE;
  **/
 public class DataManager {
     private static final String TAG = "DataManager";
+    private static DataManager sInstance;
+    private static final Object sLock = new Object();
+
     private DeviceManager mDeviceManager;
     private RetrofitHelper mRetrofitHelper;
-    private static DataManager sInstance;
     private Context mContext;
     private IActionCallback mDataCallback;
 
     private ArrayList<String> mDataList = new ArrayList<>();
+
 
     /**
      * The state of loading process
@@ -48,6 +51,7 @@ public class DataManager {
     /**
      * Gps
      */
+    /* To easy to check, using 6s instead of 6 minutes */
     private static final int GPS_INTERVAL = 6000;
     private Timer mGpsTimer;
     private TimerTask mGpsTimerTask = new TimerTask() {
@@ -63,6 +67,7 @@ public class DataManager {
     /**
      * Battery
      */
+    /* To easy to check, using 9s instead of 9 minutes */
     private static final int BATTERY_INTERVAL = 9000;
     private Timer mBatteryTimer;
     private TimerTask mBatteryTimerTask = new TimerTask() {
@@ -78,14 +83,19 @@ public class DataManager {
 
 
     public DataManager(Context context) {
-        mContext = context;
-        mDeviceManager = DeviceManager.getInstance(context);
+        mContext = context.getApplicationContext();
+        mDeviceManager = DeviceManager.getInstance(mContext);
         mRetrofitHelper = RetrofitHelper.getInstance();
     }
 
+    synchronized
     public static DataManager getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new DataManager(context);
+            synchronized (sLock) {
+                if (sInstance == null)
+                    sInstance = new DataManager(context);
+            }
+
         }
         return sInstance;
     }
