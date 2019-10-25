@@ -3,6 +3,10 @@ package itto.pl.homework.usecase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import itto.pl.homework.data.DataManager;
 import itto.pl.homework.data.network.RetrofitHelper;
@@ -12,20 +16,25 @@ import retrofit2.Response;
 
 import static itto.pl.homework.base.AppConstants.DATA_MAX_SIZE;
 
-public class SendDataUseCase extends Thread {
+public class SendDataUseCase {
 
+    private ExecutorService executorService;
     private DataManager mDataManager;
     private RetrofitHelper mRetrofitHelper;
+    private Future future;
 
     public SendDataUseCase(DataManager dataManager) {
         mDataManager = dataManager;
         mRetrofitHelper = RetrofitHelper.getInstance();
+
+        executorService = Executors.newSingleThreadExecutor();
     }
 
-    @Override
-    public void run() {
-        super.run();
-        checkForPostData();
+    public void start() {
+        future = executorService.submit(() -> {
+            checkForPostData();
+            return 1;
+        });
     }
 
     private void checkForPostData() {
@@ -53,5 +62,10 @@ public class SendDataUseCase extends Thread {
 
             }
         });
+    }
+
+    public void stop() {
+        future.cancel(true);
+        executorService.shutdownNow();
     }
 }

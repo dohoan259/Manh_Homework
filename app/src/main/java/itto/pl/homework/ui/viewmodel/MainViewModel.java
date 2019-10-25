@@ -75,7 +75,6 @@ public class MainViewModel extends AndroidViewModel {
         mIsLoading.setValue(false);
         mLoadLocationUseCase.stop();
         mLoadBatteryUseCase.stop();
-
-//        mSendDataUseCase.stop();
+        mSendDataUseCase.stop();
     }
 }
