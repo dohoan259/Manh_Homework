@@ -3,24 +3,29 @@ package itto.pl.homework.ui.viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import itto.pl.homework.base.IActionCallback;
 import itto.pl.homework.data.DataManager;
+import itto.pl.homework.data.device.DeviceManager;
+import itto.pl.homework.usecase.LoadBatteryUseCase;
+import itto.pl.homework.usecase.LoadLocationUseCase;
+import itto.pl.homework.usecase.SendDataUseCase;
 
 /**
  * Created by PL_itto-PC on 10/24/2019
  **/
 public class MainViewModel extends AndroidViewModel {
-    private DataManager mDataManager;
+    private LoadLocationUseCase mLoadLocationUseCase;
+    private LoadBatteryUseCase mLoadBatteryUseCase;
+    private SendDataUseCase mSendDataUseCase;
 
     /**
      * Indicate the state of Loading process
      */
-    MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mIsLoading = new MutableLiveData<>();
+    private MutableLiveData<String> mState = new MutableLiveData<>();
 
     public LiveData<Boolean> getLoadingState() {
         return mIsLoading;
@@ -40,12 +45,16 @@ public class MainViewModel extends AndroidViewModel {
      * @return
      */
     public LiveData<String> getState() {
-        return mDataManager.getState();
+        return mState;
     }
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        mDataManager = DataManager.getInstance(application);
+
+        mLoadLocationUseCase = new LoadLocationUseCase(DataManager.getInstance(application), DeviceManager.getInstance(application));
+        mLoadBatteryUseCase = new LoadBatteryUseCase(DataManager.getInstance(application), new DeviceManager(application));
+        mSendDataUseCase = new SendDataUseCase(DataManager.getInstance(application));
+
         mIsLoading.postValue(false);
     }
 
@@ -53,24 +62,20 @@ public class MainViewModel extends AndroidViewModel {
      * Start loading data
      */
     public void startLoading() {
-        mIsLoading.postValue(true);
-        mDataManager.startLoading(new IActionCallback() {
-            @Override
-            public void onSuccess(Object result) {
-                mResult.postValue(result != null ? result.toString() : "null");
-            }
-
-            @Override
-            public void onFailed(@Nullable Object error) {
-                mResult.postValue(error != null ? error.toString() : "error null");
-            }
-        });
+        mIsLoading.setValue(true);
+        mLoadLocationUseCase.start();
+        mLoadBatteryUseCase.start();
+        mSendDataUseCase.start();
     }
 
     /**
      * Stop loading
      */
     public void stopLoading() {
-        mIsLoading.postValue(!mDataManager.stopLoading());
+        mIsLoading.setValue(false);
+        mLoadLocationUseCase.stop();
+        mLoadBatteryUseCase.stop();
+
+//        mSendDataUseCase.stop();
     }
 }
