@@ -38,7 +38,11 @@ public class DataManager {
 
     private ArrayList<String> mDataList = new ArrayList<>();
 
-
+    synchronized
+    private void addDataToList(String data){
+        mDataList.add(data);
+        checkForPostData();
+    }
     /**
      * The state of loading process
      */
@@ -59,8 +63,9 @@ public class DataManager {
         public void run() {
             LocationItem item = mDeviceManager.getLastBestLocation();
             mState.postValue(mContext.getString(R.string.gps_info, item.getLatitude(), item.getLongitude()));
-            mDataList.add(item.toString());
-            checkForPostData();
+            addDataToList(item.toString());
+//            mDataList.add(item.toString());
+//            checkForPostData();
         }
     };
 
@@ -76,8 +81,9 @@ public class DataManager {
             String battery = String.valueOf(mDeviceManager.getBatteryLevel());
             battery = mContext.getString(R.string.battery_info, battery);
             mState.postValue(battery);
-            mDataList.add(battery);
-            checkForPostData();
+            addDataToList(battery);
+//            mDataList.add(battery);
+//            checkForPostData();
         }
     };
 
