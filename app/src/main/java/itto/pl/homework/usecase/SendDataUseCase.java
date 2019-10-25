@@ -32,8 +32,10 @@ public class SendDataUseCase extends Thread {
         mDataManager.getDataList().observeForever(dataList -> {
             if (dataList.size() == DATA_MAX_SIZE) {
                 // lock DataManager
-                sendData(dataList);
-                mDataManager.clearDataList();
+                synchronized (DataManager.class) {
+                    sendData(dataList);
+                    mDataManager.clearDataList();
+                }
                 // unlock DataManager
             }
         });
