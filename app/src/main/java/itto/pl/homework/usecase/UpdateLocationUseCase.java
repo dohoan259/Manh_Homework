@@ -5,7 +5,7 @@ import java.util.TimerTask;
 
 import itto.pl.homework.data.repository.DataRepository;
 import itto.pl.homework.data.model.LocationEntity;
-import itto.pl.homework.data.repository.DeviceManager;
+import itto.pl.homework.ui.thirdparty.DeviceManager;
 import itto.pl.homework.ui.viewmodel.LocationItem;
 
 public class UpdateLocationUseCase {

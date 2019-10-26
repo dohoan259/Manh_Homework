@@ -1,4 +1,4 @@
-package itto.pl.homework.data.repository;
+package itto.pl.homework.ui.thirdparty;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

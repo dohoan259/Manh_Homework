@@ -28,6 +28,52 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_location_state_label"
+        style="@style/LabelTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Location State:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_start" />
+
+    <TextView
+        android:id="@+id/tv_location_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textStyle="bold|italic"
+        android:textColor="@color/green"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_location_state_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_location_state_label"
+        app:layout_constraintTop_toTopOf="@+id/tv_location_state_label"
+        tools:text="Loading" />
+
+    <TextView
+        android:id="@+id/tv_battery_state_label"
+        style="@style/LabelTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Battery State:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_location_state_label" />
+
+    <TextView
+        android:id="@+id/tv_battery_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textStyle="bold|italic"
+        android:textColor="@color/green"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_battery_state_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_battery_state_label"
+        app:layout_constraintTop_toTopOf="@+id/tv_battery_state_label"
+        tools:text="Loading" />
+
+    <TextView
         android:id="@+id/tv_response_label"
         style="@style/LabelTextStyle"
         android:layout_width="wrap_content"
@@ -35,7 +81,7 @@
         android:layout_marginTop="20dp"
         android:text="Response:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_state_label" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_battery_state_label" />
 
     <TextView
         android:id="@+id/tv_response"
@@ -48,27 +94,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_response_label" />
-
-    <TextView
-        android:id="@+id/tv_state_label"
-        style="@style/LabelTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="State:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_start" />
-
-    <TextView
-        android:id="@+id/tv_state"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:textStyle="bold|italic"
-        android:textColor="@color/green"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_state_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_state_label"
-        app:layout_constraintTop_toTopOf="@+id/tv_state_label"
-        tools:text="Loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>

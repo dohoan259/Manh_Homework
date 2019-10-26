@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 import itto.pl.homework.data.repository.DataRepository;
 import itto.pl.homework.data.model.BatteryEntity;
-import itto.pl.homework.data.repository.DeviceManager;
+import itto.pl.homework.ui.thirdparty.DeviceManager;
 
 public class UpdateBatteryUseCase {
 

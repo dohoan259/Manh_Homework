@@ -11,7 +11,6 @@ import itto.pl.homework.R;
 import itto.pl.homework.base.BaseActivity;
 import itto.pl.homework.base.IActionCallback;
 import itto.pl.homework.ui.viewmodel.MainViewModel;
-import retrofit2.http.POST;
 
 public class MainActivity extends BaseActivity {
 
@@ -19,7 +18,8 @@ public class MainActivity extends BaseActivity {
     private Button mBtnStart;
     private Button mBtnStop;
     private TextView mTvResponse;
-    private TextView mTvState;
+    private TextView mTvLocationState;
+    private TextView mTvBatteryState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,8 @@ public class MainActivity extends BaseActivity {
         mBtnStart = findViewById(R.id.btn_start);
         mBtnStop = findViewById(R.id.btn_stop);
         mTvResponse = findViewById(R.id.tv_response);
-        mTvState = findViewById(R.id.tv_state);
+        mTvLocationState = findViewById(R.id.tv_location_state);
+        mTvBatteryState = findViewById(R.id.tv_battery_state);
 
         mBtnStart.setOnClickListener((view) -> requestForStarting());
         mBtnStop.setOnClickListener((view) -> requestForStopping());
@@ -58,19 +59,22 @@ public class MainActivity extends BaseActivity {
         mViewModel.getLoadingState().observe(this, isLoading -> {
                     if (isLoading) {
                         /* If is loading data, disable start button */
-                        mTvState.setText(R.string.loading);
+                        mTvLocationState.setText(R.string.loading);
+                        mTvBatteryState.setText(R.string.loading);
                         mBtnStart.setEnabled(false);
                         mBtnStop.setEnabled(true);
                     } else {
                         /* If is NOT loading data, disable stop button */
-                        mTvState.setText(R.string.stopped);
+                        mTvLocationState.setText(R.string.stopped);
+                        mTvBatteryState.setText(R.string.stopped);
                         mBtnStart.setEnabled(true);
                         mBtnStop.setEnabled(false);
                     }
                 }
         );
         /* Update state Label */
-        mViewModel.getState().observe(this, state -> mTvState.setText(state));
+        mViewModel.getLocationState().observe(this, state -> mTvLocationState.setText(state));
+        mViewModel.getBatteryState().observe(this, state -> mTvBatteryState.setText(state));
         /* Update Response label */
         mViewModel.getResult().observe(this, response -> mTvResponse.append(response + "\n---------------\n"));
     }

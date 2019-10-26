@@ -1,5 +1,7 @@
 package itto.pl.homework.usecase;
 
+import androidx.lifecycle.Observer;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class SendDataUseCase {
     private DataRepository mDataRepository;
     private RetrofitHelper mRetrofitHelper;
     private Future future;
+    private Observer<List<String>> mObserver;
 
     public SendDataUseCase(DataRepository dataRepository) {
         mDataRepository = dataRepository;
@@ -37,7 +40,7 @@ public class SendDataUseCase {
     }
 
     private void checkForPostData() {
-        mDataRepository.getDataList().observeForever(dataList -> {
+        mObserver = dataList -> {
             if (dataList.size() == DATA_MAX_SIZE) {
                 // lock DataRepository
                 synchronized (DataRepository.class) {
@@ -46,7 +49,8 @@ public class SendDataUseCase {
                 }
                 // unlock DataRepository
             }
-        });
+        };
+        mDataRepository.getDataList().observeForever(mObserver);
     }
 
     private void sendData(List<String> dataList) {
@@ -64,6 +68,7 @@ public class SendDataUseCase {
     }
 
     public void stop() {
+        mDataRepository.getDataList().removeObserver(mObserver);
         future.cancel(true);
         executorService.shutdownNow();
     }
